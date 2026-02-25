@@ -5,9 +5,11 @@ import pg from "pg";
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 function createPrismaClient() {
-  const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+  let connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || "";
+  // Replace sslmode=require with sslmode=no-verify to accept Supabase's certificate
+  connectionString = connectionString.replace("sslmode=require", "sslmode=no-verify");
   const pool = new pg.Pool({
-    connectionString: connectionString!,
+    connectionString,
     ssl: { rejectUnauthorized: false },
   });
   const adapter = new PrismaPg(pool);
