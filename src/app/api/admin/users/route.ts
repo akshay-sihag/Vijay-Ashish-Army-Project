@@ -8,18 +8,24 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const users = await prisma.user.findMany({
-    include: {
-      vehicleAssignment: {
-        include: { vehicle: true },
+  try {
+    const users = await prisma.user.findMany({
+      include: {
+        vehicleAssignment: {
+          include: { vehicle: true },
+        },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      orderBy: { createdAt: "desc" },
+    });
 
-  // Strip password from response
-  const safeUsers = users.map(({ password: _, ...user }) => user);
-  return NextResponse.json(safeUsers);
+    // Strip password from response
+    const safeUsers = users.map(({ password: _, ...user }) => user);
+    return NextResponse.json(safeUsers);
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to fetch users", detail: message }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -56,6 +62,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(safeUser, { status: 201 });
   } catch (error) {
     console.error("Failed to create user:", error);
-    return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: "Failed to create user", detail: message }, { status: 500 });
   }
 }
