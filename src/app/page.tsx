@@ -65,113 +65,131 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-indigo-50 p-4">
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-8">
-          Vehicle Management
-        </h1>
-
-        {/* Tab Selector */}
-        <div className="flex mb-6 bg-gray-200 rounded-xl p-1">
-          <button
-            onClick={() => {
-              setActiveTab("user");
-              setError("");
-            }}
-            className={`flex-1 py-3 rounded-lg font-semibold transition-colors ${
-              activeTab === "user"
-                ? "bg-white text-blue-600 shadow"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
-          >
-            Driver Login
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab("admin");
-              setError("");
-            }}
-            className={`flex-1 py-3 rounded-lg font-semibold transition-colors ${
-              activeTab === "admin"
-                ? "bg-white text-blue-600 shadow"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
-          >
-            Admin Login
-          </button>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold text-indigo-700 tracking-tight">
+            Vijay Ashish
+          </h1>
+          <p className="text-gray-500 mt-1">Army Fleet Management</p>
         </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-center">
-            {error}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+          {/* Tab Selector */}
+          <div className="flex mb-6 bg-gray-100 rounded-xl p-1">
+            <button
+              onClick={() => {
+                setActiveTab("user");
+                setError("");
+              }}
+              className={`flex-1 py-3 rounded-lg font-semibold transition-colors ${
+                activeTab === "user"
+                  ? "bg-white text-indigo-600 shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Driver Login
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("admin");
+                setError("");
+              }}
+              className={`flex-1 py-3 rounded-lg font-semibold transition-colors ${
+                activeTab === "admin"
+                  ? "bg-white text-indigo-600 shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Admin Login
+            </button>
           </div>
-        )}
 
-        {/* Admin Login Form */}
-        {activeTab === "admin" && (
-          <form onSubmit={handleAdminLogin} className="space-y-6">
-            <div>
-              <label className="block text-lg font-semibold mb-2">
-                Admin Password
-              </label>
-              <input
-                type="password"
-                value={adminPassword}
-                onChange={(e) => setAdminPassword(e.target.value)}
-                placeholder="Enter admin password"
-                required
-                autoFocus
-              />
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-center text-base">
+              {error}
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? "Logging in..." : "Login as Admin"}
-            </button>
-          </form>
-        )}
+          )}
 
-        {/* User Login Form */}
-        {activeTab === "user" && (
-          <form onSubmit={handleUserLogin} className="space-y-6">
-            <div>
-              <label className="block text-lg font-semibold mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
-                required
-                autoFocus
-              />
-            </div>
-            <div>
-              <label className="block text-lg font-semibold mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={userPassword}
-                onChange={(e) => setUserPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-        )}
+          {/* Admin Login Form */}
+          {activeTab === "admin" && (
+            <form onSubmit={handleAdminLogin} className="space-y-5">
+              <div>
+                <label className="block text-base font-semibold mb-2 text-gray-700">
+                  Admin Password
+                </label>
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  placeholder="Enter admin password"
+                  required
+                  autoFocus
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? "Logging in..." : "Login as Admin"}
+              </button>
+            </form>
+          )}
+
+          {/* User Login Form */}
+          {activeTab === "user" && (
+            <form onSubmit={handleUserLogin} className="space-y-5">
+              <div>
+                <label className="block text-base font-semibold mb-2 text-gray-700">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
+                  required
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold mb-2 text-gray-700">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={userPassword}
+                  onChange={(e) => setUserPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
+
+      <footer className="mt-12 text-center text-sm text-gray-400">
+        <p>&copy; 2026 Vijay Ashish. App Designed &amp; Developed by{" "}
+          <a
+            href="https://github.com/akshay-sihag"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-500 hover:text-indigo-600 hover:underline transition-colors"
+          >
+            Akshay Sihag
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }

@@ -100,64 +100,61 @@ export default function EditTaskPage() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-xl text-gray-500">Loading...</div>;
+    return <div className="text-center py-16 text-gray-400">Loading...</div>;
   }
 
   if (!task) {
-    return <div className="text-center py-12 text-xl text-red-500">Task not found</div>;
+    return <div className="text-center py-16 text-red-400">Task not found</div>;
   }
 
   return (
     <div className="max-w-2xl mx-auto">
       <button
         onClick={() => router.push("/dashboard")}
-        className="mb-4 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg font-semibold"
+        className="mb-4 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-colors"
       >
         &larr; Back to Dashboard
       </button>
 
-      <h1 className="text-2xl font-bold mb-6">Edit Task</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">Edit Task</h1>
 
       {msg && (
         <div
-          className={`px-4 py-3 rounded-xl mb-4 ${
+          className={`px-4 py-3 rounded-xl mb-4 text-sm ${
             msg.includes("success")
-              ? "bg-green-50 border-2 border-green-200 text-green-700"
-              : "bg-red-50 border-2 border-red-200 text-red-700"
+              ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+              : "bg-red-50 border border-red-200 text-red-700"
           }`}
         >
           {msg}
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         {/* Prefilled read-only */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-xl mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl mb-6 border border-slate-100">
           <div>
-            <label className="block font-semibold mb-1 text-gray-500">Vehicle Number</label>
+            <label className="block font-medium mb-1 text-xs text-gray-400 uppercase tracking-wider">Vehicle Number</label>
             <input
               type="text"
               value={task.vehicleNumber}
               disabled
-              className="bg-gray-100 text-gray-600 cursor-not-allowed"
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1 text-gray-500">Type of Vehicle</label>
+            <label className="block font-medium mb-1 text-xs text-gray-400 uppercase tracking-wider">Type of Vehicle</label>
             <input
               type="text"
               value={task.typeOfVehicle}
               disabled
-              className="bg-gray-100 text-gray-600 cursor-not-allowed"
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1 text-gray-500">Driver Name</label>
+            <label className="block font-medium mb-1 text-xs text-gray-400 uppercase tracking-wider">Driver Name</label>
             <input
               type="text"
               value={task.driverName}
               disabled
-              className="bg-gray-100 text-gray-600 cursor-not-allowed"
             />
           </div>
         </div>
@@ -166,7 +163,7 @@ export default function EditTaskPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
-              <label className="block font-semibold mb-1">Date & Time *</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Date & Time *</label>
               <input
                 type="datetime-local"
                 value={formData.date}
@@ -175,7 +172,7 @@ export default function EditTaskPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Assigned Location</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Assigned Location</label>
               <input
                 type="text"
                 value={formData.assignedLocation}
@@ -184,7 +181,7 @@ export default function EditTaskPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Current Location</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Current Location</label>
               <input
                 type="text"
                 value={formData.currentLocation}
@@ -193,7 +190,7 @@ export default function EditTaskPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Task</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Task</label>
               <input
                 type="text"
                 value={formData.task}
@@ -202,7 +199,7 @@ export default function EditTaskPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Action</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Action</label>
               <input
                 type="text"
                 value={formData.action}
@@ -211,7 +208,7 @@ export default function EditTaskPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Status</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Status</label>
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
@@ -222,7 +219,7 @@ export default function EditTaskPage() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Priority</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Priority</label>
               <select
                 value={formData.priority}
                 onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
@@ -233,7 +230,7 @@ export default function EditTaskPage() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Problem</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Problem</label>
               <input
                 type="text"
                 value={formData.problem}
@@ -242,7 +239,7 @@ export default function EditTaskPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Solution</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Solution</label>
               <select
                 value={formData.solution}
                 onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
@@ -253,7 +250,7 @@ export default function EditTaskPage() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Spares</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Spares</label>
               <select
                 value={formData.spares}
                 onChange={(e) => setFormData({ ...formData, spares: e.target.value })}
@@ -269,14 +266,14 @@ export default function EditTaskPage() {
             <button
               type="submit"
               disabled={saving}
-              className="bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 text-lg px-8"
+              className="bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 px-8 transition-colors"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 text-lg px-8"
+              className="bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 px-8 transition-colors"
             >
               Cancel
             </button>

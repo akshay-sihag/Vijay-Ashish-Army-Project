@@ -89,16 +89,16 @@ export default function AdminVehiclesPage() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-xl text-gray-500">Loading vehicles...</div>;
+    return <div className="text-center py-16 text-gray-400">Loading vehicles...</div>;
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Manage Vehicles</h1>
+        <h1 className="text-2xl font-bold text-slate-800">Manage Vehicles</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+          className="bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
         >
           {showForm ? "Cancel" : "Add Vehicle"}
         </button>
@@ -106,16 +106,16 @@ export default function AdminVehiclesPage() {
 
       {/* Add Vehicle Form */}
       {showForm && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">New Vehicle</h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+          <h2 className="text-lg font-bold text-slate-800 mb-4">New Vehicle</h2>
           {formError && (
-            <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
               {formError}
             </div>
           )}
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold mb-1">Vehicle Number</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Vehicle Number</label>
               <input
                 type="text"
                 value={formData.vehicleNumber}
@@ -124,7 +124,7 @@ export default function AdminVehiclesPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Type of Vehicle</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Type of Vehicle</label>
               <input
                 type="text"
                 value={formData.typeOfVehicle}
@@ -136,7 +136,7 @@ export default function AdminVehiclesPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50"
+                className="bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {saving ? "Creating..." : "Create Vehicle"}
               </button>
@@ -147,12 +147,12 @@ export default function AdminVehiclesPage() {
 
       {/* Vehicles Table */}
       {vehicles.length === 0 ? (
-        <div className="text-center py-12 text-gray-500 bg-white rounded-xl border border-gray-200">
-          <p className="text-xl mb-2">No vehicles yet</p>
-          <p>Click &quot;Add Vehicle&quot; to add the first vehicle.</p>
+        <div className="text-center py-16 text-gray-400 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-lg mb-1">No vehicles yet</p>
+          <p className="text-sm">Click &quot;Add Vehicle&quot; to add the first vehicle.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -164,7 +164,7 @@ export default function AdminVehiclesPage() {
             </thead>
             <tbody>
               {vehicles.map((vehicle) => (
-                <tr key={vehicle.id} className="hover:bg-gray-50">
+                <tr key={vehicle.id} className="hover:bg-indigo-50/30 transition-colors">
                   <td>
                     {editingId === vehicle.id ? (
                       <input
@@ -174,7 +174,7 @@ export default function AdminVehiclesPage() {
                         className="w-full"
                       />
                     ) : (
-                      <span className="font-semibold">{vehicle.vehicleNumber}</span>
+                      <span className="font-semibold text-slate-700">{vehicle.vehicleNumber}</span>
                     )}
                   </td>
                   <td>
@@ -186,16 +186,16 @@ export default function AdminVehiclesPage() {
                         className="w-full"
                       />
                     ) : (
-                      vehicle.typeOfVehicle
+                      <span className="text-slate-600">{vehicle.typeOfVehicle}</span>
                     )}
                   </td>
                   <td>
                     {vehicle.vehicleAssignment ? (
-                      <span className="text-green-700 font-semibold">
+                      <span className="text-emerald-600 font-semibold">
                         {vehicle.vehicleAssignment.user.name}
                       </span>
                     ) : (
-                      <span className="text-gray-400">Unassigned</span>
+                      <span className="text-gray-300">Unassigned</span>
                     )}
                   </td>
                   <td>
@@ -204,13 +204,13 @@ export default function AdminVehiclesPage() {
                         <>
                           <button
                             onClick={() => handleSaveEdit(vehicle.id)}
-                            className="px-3 py-2 bg-green-50 text-green-600 rounded-lg font-semibold hover:bg-green-100 text-base"
+                            className="px-3 py-2 bg-emerald-50 text-emerald-600 rounded-lg font-medium hover:bg-emerald-100 text-sm transition-colors"
                           >
                             Save
                           </button>
                           <button
                             onClick={() => setEditingId(null)}
-                            className="px-3 py-2 bg-gray-50 text-gray-600 rounded-lg font-semibold hover:bg-gray-100 text-base"
+                            className="px-3 py-2 bg-gray-50 text-gray-500 rounded-lg font-medium hover:bg-gray-100 text-sm transition-colors"
                           >
                             Cancel
                           </button>
@@ -225,13 +225,13 @@ export default function AdminVehiclesPage() {
                                 typeOfVehicle: vehicle.typeOfVehicle,
                               });
                             }}
-                            className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg font-semibold hover:bg-blue-100 text-base"
+                            className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 text-sm transition-colors"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => handleDelete(vehicle.id, vehicle.vehicleNumber)}
-                            className="px-3 py-2 bg-red-50 text-red-600 rounded-lg font-semibold hover:bg-red-100 text-base"
+                            className="px-3 py-2 bg-red-50 text-red-500 rounded-lg font-medium hover:bg-red-100 text-sm transition-colors"
                           >
                             Delete
                           </button>

@@ -90,16 +90,16 @@ export default function AdminUsersPage() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-xl text-gray-500">Loading users...</div>;
+    return <div className="text-center py-16 text-gray-400">Loading users...</div>;
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Manage Users</h1>
+        <h1 className="text-2xl font-bold text-slate-800">Manage Users</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+          className="bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
         >
           {showForm ? "Cancel" : "Add User"}
         </button>
@@ -107,16 +107,16 @@ export default function AdminUsersPage() {
 
       {/* Add User Form */}
       {showForm && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-bold mb-4">New User</h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+          <h2 className="text-lg font-bold text-slate-800 mb-4">New User</h2>
           {formError && (
-            <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
               {formError}
             </div>
           )}
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold mb-1">Name</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Name</label>
               <input
                 type="text"
                 value={formData.name}
@@ -125,7 +125,7 @@ export default function AdminUsersPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Username</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Username</label>
               <input
                 type="text"
                 value={formData.username}
@@ -134,7 +134,7 @@ export default function AdminUsersPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Password</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Password</label>
               <input
                 type="password"
                 value={formData.password}
@@ -143,7 +143,7 @@ export default function AdminUsersPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Age</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Age</label>
               <input
                 type="number"
                 value={formData.age}
@@ -154,7 +154,7 @@ export default function AdminUsersPage() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Gender</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Gender</label>
               <select
                 value={formData.gender}
                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
@@ -165,7 +165,7 @@ export default function AdminUsersPage() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Unit</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Unit</label>
               <input
                 type="text"
                 value={formData.unit}
@@ -177,7 +177,7 @@ export default function AdminUsersPage() {
               <button
                 type="submit"
                 disabled={saving}
-                className="bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50"
+                className="bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {saving ? "Creating..." : "Create User"}
               </button>
@@ -188,12 +188,12 @@ export default function AdminUsersPage() {
 
       {/* Users Table */}
       {users.length === 0 ? (
-        <div className="text-center py-12 text-gray-500 bg-white rounded-xl border border-gray-200">
-          <p className="text-xl mb-2">No users yet</p>
-          <p>Click &quot;Add User&quot; to create the first driver account.</p>
+        <div className="text-center py-16 text-gray-400 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-lg mb-1">No users yet</p>
+          <p className="text-sm">Click &quot;Add User&quot; to create the first driver account.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
           <table>
             <thead>
               <tr>
@@ -208,32 +208,32 @@ export default function AdminUsersPage() {
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="font-semibold">{user.name}</td>
-                  <td className="text-gray-600">{user.username}</td>
-                  <td>{user.age}</td>
-                  <td>{user.gender}</td>
-                  <td>{user.unit}</td>
+                <tr key={user.id} className="hover:bg-indigo-50/30 transition-colors">
+                  <td className="font-semibold text-slate-700">{user.name}</td>
+                  <td className="text-gray-500">{user.username}</td>
+                  <td className="text-slate-600">{user.age}</td>
+                  <td className="text-slate-600">{user.gender}</td>
+                  <td className="text-slate-600">{user.unit}</td>
                   <td>
                     {user.vehicleAssignment ? (
-                      <span className="text-green-700 font-semibold">
+                      <span className="text-emerald-600 font-semibold">
                         {user.vehicleAssignment.vehicle.vehicleNumber}
                       </span>
                     ) : (
-                      <span className="text-gray-400">Not assigned</span>
+                      <span className="text-gray-300">Not assigned</span>
                     )}
                   </td>
                   <td>
                     <div className="flex gap-2">
                       <Link
                         href={`/admin/users/${user.id}`}
-                        className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg font-semibold hover:bg-blue-100 text-base"
+                        className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 text-sm transition-colors"
                       >
                         Edit
                       </Link>
                       <button
                         onClick={() => handleDelete(user.id, user.name)}
-                        className="px-3 py-2 bg-red-50 text-red-600 rounded-lg font-semibold hover:bg-red-100 text-base"
+                        className="px-3 py-2 bg-red-50 text-red-500 rounded-lg font-medium hover:bg-red-100 text-sm transition-colors"
                       >
                         Delete
                       </button>

@@ -151,11 +151,11 @@ export default function EditUserPage() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-xl text-gray-500">Loading...</div>;
+    return <div className="text-center py-16 text-gray-400">Loading...</div>;
   }
 
   if (!user) {
-    return <div className="text-center py-12 text-xl text-red-500">User not found</div>;
+    return <div className="text-center py-16 text-red-400">User not found</div>;
   }
 
   // Available vehicles: unassigned OR currently assigned to this user
@@ -169,30 +169,30 @@ export default function EditUserPage() {
     <div className="max-w-2xl mx-auto">
       <button
         onClick={() => router.push("/admin/users")}
-        className="mb-4 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg font-semibold"
+        className="mb-4 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg font-medium transition-colors"
       >
         &larr; Back to Users
       </button>
 
-      <h1 className="text-2xl font-bold mb-6">Edit User: {user.name}</h1>
+      <h1 className="text-2xl font-bold text-slate-800 mb-6">Edit User: {user.name}</h1>
 
       {error && (
-        <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
           {error}
         </div>
       )}
       {success && (
-        <div className="bg-green-50 border-2 border-green-200 text-green-700 px-4 py-3 rounded-xl mb-4">
+        <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl mb-4 text-sm">
           {success}
         </div>
       )}
 
       {/* User Details Form */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4">User Details</h2>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 className="text-lg font-bold text-slate-800 mb-4">User Details</h2>
         <form onSubmit={handleSaveUser} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block font-semibold mb-1">Name</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">Name</label>
             <input
               type="text"
               value={formData.name}
@@ -201,7 +201,7 @@ export default function EditUserPage() {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1">Username</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">Username</label>
             <input
               type="text"
               value={formData.username}
@@ -210,7 +210,7 @@ export default function EditUserPage() {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1">New Password</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">New Password</label>
             <input
               type="password"
               value={formData.password}
@@ -219,7 +219,7 @@ export default function EditUserPage() {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1">Age</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">Age</label>
             <input
               type="number"
               value={formData.age}
@@ -230,7 +230,7 @@ export default function EditUserPage() {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1">Gender</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">Gender</label>
             <select
               value={formData.gender}
               onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
@@ -241,7 +241,7 @@ export default function EditUserPage() {
             </select>
           </div>
           <div>
-            <label className="block font-semibold mb-1">Unit</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">Unit</label>
             <input
               type="text"
               value={formData.unit}
@@ -253,7 +253,7 @@ export default function EditUserPage() {
             <button
               type="submit"
               disabled={saving}
-              className="bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50"
+              className="bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
               {saving ? "Saving..." : "Save Details"}
             </button>
@@ -262,20 +262,20 @@ export default function EditUserPage() {
       </div>
 
       {/* Vehicle Assignment */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-xl font-bold mb-4">Vehicle Assignment</h2>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-lg font-bold text-slate-800 mb-4">Vehicle Assignment</h2>
         {user.vehicleAssignment && (
-          <p className="mb-4 text-lg">
+          <p className="mb-4">
             Currently assigned:{" "}
-            <span className="font-bold text-green-700">
+            <span className="font-bold text-emerald-600">
               {user.vehicleAssignment.vehicle.vehicleNumber}
             </span>{" "}
-            ({user.vehicleAssignment.vehicle.typeOfVehicle})
+            <span className="text-gray-400">({user.vehicleAssignment.vehicle.typeOfVehicle})</span>
           </p>
         )}
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
-            <label className="block font-semibold mb-1">Select Vehicle</label>
+            <label className="block font-medium mb-1 text-sm text-gray-600">Select Vehicle</label>
             <select
               value={selectedVehicleId}
               onChange={(e) => setSelectedVehicleId(e.target.value)}
@@ -291,7 +291,7 @@ export default function EditUserPage() {
           <div className="flex items-end">
             <button
               onClick={handleAssignVehicle}
-              className="bg-green-600 text-white rounded-xl hover:bg-green-700"
+              className="bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors"
             >
               {selectedVehicleId ? "Assign Vehicle" : "Remove Assignment"}
             </button>

@@ -62,11 +62,11 @@ function getCurrentDateTime(): string {
 function priorityColor(priority: string) {
   switch (priority) {
     case "High":
-      return "bg-red-100 text-red-700 border-red-200";
+      return "bg-red-50 text-red-700 border-red-200";
     case "Medium":
-      return "bg-orange-100 text-orange-700 border-orange-200";
+      return "bg-amber-50 text-amber-700 border-amber-200";
     default:
-      return "bg-green-100 text-green-700 border-green-200";
+      return "bg-emerald-50 text-emerald-700 border-emerald-200";
   }
 }
 
@@ -220,11 +220,11 @@ export default function UserDashboard() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-xl text-gray-500">Loading...</div>;
+    return <div className="text-center py-16 text-gray-400">Loading...</div>;
   }
 
   if (!profile) {
-    return <div className="text-center py-12 text-xl text-red-500">Could not load profile.</div>;
+    return <div className="text-center py-16 text-red-400">Could not load profile.</div>;
   }
 
   const vehicle = profile.vehicleAssignment?.vehicle;
@@ -232,12 +232,12 @@ export default function UserDashboard() {
   return (
     <div className="space-y-6">
       {/* Section 1: Profile Card */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold">My Profile</h2>
+          <h2 className="text-lg font-bold text-slate-800">My Profile</h2>
           <button
             onClick={() => setEditingProfile(!editingProfile)}
-            className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg font-semibold hover:bg-blue-100 text-base"
+            className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 text-sm transition-colors"
           >
             {editingProfile ? "Cancel" : "Edit"}
           </button>
@@ -245,10 +245,10 @@ export default function UserDashboard() {
 
         {profileMsg && (
           <div
-            className={`px-4 py-3 rounded-xl mb-4 ${
+            className={`px-4 py-3 rounded-xl mb-4 text-sm ${
               profileMsg.includes("success")
-                ? "bg-green-50 border-2 border-green-200 text-green-700"
-                : "bg-red-50 border-2 border-red-200 text-red-700"
+                ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+                : "bg-red-50 border border-red-200 text-red-700"
             }`}
           >
             {profileMsg}
@@ -258,7 +258,7 @@ export default function UserDashboard() {
         {editingProfile ? (
           <form onSubmit={handleSaveProfile} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold mb-1">Name</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Name</label>
               <input
                 type="text"
                 value={profileForm.name}
@@ -267,7 +267,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Age</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Age</label>
               <input
                 type="number"
                 value={profileForm.age}
@@ -276,7 +276,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Gender</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Gender</label>
               <select
                 value={profileForm.gender}
                 onChange={(e) => setProfileForm({ ...profileForm, gender: e.target.value })}
@@ -287,7 +287,7 @@ export default function UserDashboard() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Unit</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Unit</label>
               <input
                 type="text"
                 value={profileForm.unit}
@@ -299,7 +299,7 @@ export default function UserDashboard() {
               <button
                 type="submit"
                 disabled={profileSaving}
-                className="bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50"
+                className="bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
               >
                 {profileSaving ? "Saving..." : "Save Profile"}
               </button>
@@ -308,30 +308,30 @@ export default function UserDashboard() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
-              <p className="text-gray-500 text-sm">Name</p>
-              <p className="font-semibold text-lg">{profile.name}</p>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Name</p>
+              <p className="font-semibold text-slate-700">{profile.name}</p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">Age</p>
-              <p className="font-semibold text-lg">{profile.age}</p>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Age</p>
+              <p className="font-semibold text-slate-700">{profile.age}</p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">Gender</p>
-              <p className="font-semibold text-lg">{profile.gender}</p>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Gender</p>
+              <p className="font-semibold text-slate-700">{profile.gender}</p>
             </div>
             <div>
-              <p className="text-gray-500 text-sm">Unit</p>
-              <p className="font-semibold text-lg">{profile.unit}</p>
+              <p className="text-gray-400 text-xs uppercase tracking-wider">Unit</p>
+              <p className="font-semibold text-slate-700">{profile.unit}</p>
             </div>
             {vehicle && (
               <>
                 <div>
-                  <p className="text-gray-500 text-sm">Vehicle Number</p>
-                  <p className="font-semibold text-lg text-blue-600">{vehicle.vehicleNumber}</p>
+                  <p className="text-gray-400 text-xs uppercase tracking-wider">Vehicle Number</p>
+                  <p className="font-semibold text-indigo-600">{vehicle.vehicleNumber}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Vehicle Type</p>
-                  <p className="font-semibold text-lg">{vehicle.typeOfVehicle}</p>
+                  <p className="text-gray-400 text-xs uppercase tracking-wider">Vehicle Type</p>
+                  <p className="font-semibold text-slate-700">{vehicle.typeOfVehicle}</p>
                 </div>
               </>
             )}
@@ -340,21 +340,21 @@ export default function UserDashboard() {
       </div>
 
       {/* Section 2: New Task Form */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-xl font-bold mb-4">Submit Daily Task</h2>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-lg font-bold text-slate-800 mb-4">Submit Daily Task</h2>
 
         {!vehicle && (
-          <div className="bg-yellow-50 border-2 border-yellow-200 text-yellow-700 px-4 py-3 rounded-xl mb-4">
+          <div className="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl mb-4 text-sm">
             No vehicle assigned to you yet. Please contact your admin.
           </div>
         )}
 
         {taskMsg && (
           <div
-            className={`px-4 py-3 rounded-xl mb-4 ${
+            className={`px-4 py-3 rounded-xl mb-4 text-sm ${
               taskMsg.includes("success")
-                ? "bg-green-50 border-2 border-green-200 text-green-700"
-                : "bg-red-50 border-2 border-red-200 text-red-700"
+                ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+                : "bg-red-50 border border-red-200 text-red-700"
             }`}
           >
             {taskMsg}
@@ -363,32 +363,29 @@ export default function UserDashboard() {
 
         <form onSubmit={handleSubmitTask} className="space-y-4">
           {/* Prefilled (read-only) fields */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <div>
-              <label className="block font-semibold mb-1 text-gray-500">Vehicle Number</label>
+              <label className="block font-medium mb-1 text-xs text-gray-400 uppercase tracking-wider">Vehicle Number</label>
               <input
                 type="text"
                 value={vehicle?.vehicleNumber || "Not assigned"}
                 disabled
-                className="bg-gray-100 text-gray-600 cursor-not-allowed"
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1 text-gray-500">Type of Vehicle</label>
+              <label className="block font-medium mb-1 text-xs text-gray-400 uppercase tracking-wider">Type of Vehicle</label>
               <input
                 type="text"
                 value={vehicle?.typeOfVehicle || "Not assigned"}
                 disabled
-                className="bg-gray-100 text-gray-600 cursor-not-allowed"
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1 text-gray-500">Driver Name</label>
+              <label className="block font-medium mb-1 text-xs text-gray-400 uppercase tracking-wider">Driver Name</label>
               <input
                 type="text"
                 value={profile.name}
                 disabled
-                className="bg-gray-100 text-gray-600 cursor-not-allowed"
               />
             </div>
           </div>
@@ -396,7 +393,7 @@ export default function UserDashboard() {
           {/* Editable fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
-              <label className="block font-semibold mb-1">Date & Time *</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Date & Time *</label>
               <input
                 type="datetime-local"
                 value={taskForm.date}
@@ -405,7 +402,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Assigned Location</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Assigned Location</label>
               <input
                 type="text"
                 value={taskForm.assignedLocation}
@@ -414,7 +411,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Current Location</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Current Location</label>
               <input
                 type="text"
                 value={taskForm.currentLocation}
@@ -423,7 +420,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Task</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Task</label>
               <input
                 type="text"
                 value={taskForm.task}
@@ -432,7 +429,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Action</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Action</label>
               <input
                 type="text"
                 value={taskForm.action}
@@ -441,7 +438,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Status</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Status</label>
               <select
                 value={taskForm.status}
                 onChange={(e) => setTaskForm({ ...taskForm, status: e.target.value })}
@@ -452,7 +449,7 @@ export default function UserDashboard() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Priority</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Priority</label>
               <select
                 value={taskForm.priority}
                 onChange={(e) => setTaskForm({ ...taskForm, priority: e.target.value })}
@@ -463,7 +460,7 @@ export default function UserDashboard() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Problem</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Problem</label>
               <input
                 type="text"
                 value={taskForm.problem}
@@ -472,7 +469,7 @@ export default function UserDashboard() {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Solution</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Solution</label>
               <select
                 value={taskForm.solution}
                 onChange={(e) => setTaskForm({ ...taskForm, solution: e.target.value })}
@@ -483,7 +480,7 @@ export default function UserDashboard() {
               </select>
             </div>
             <div>
-              <label className="block font-semibold mb-1">Spares</label>
+              <label className="block font-medium mb-1 text-sm text-gray-600">Spares</label>
               <select
                 value={taskForm.spares}
                 onChange={(e) => setTaskForm({ ...taskForm, spares: e.target.value })}
@@ -498,7 +495,7 @@ export default function UserDashboard() {
           <button
             type="submit"
             disabled={taskSaving || !vehicle}
-            className="bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-lg px-8"
+            className="bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors px-8"
           >
             {taskSaving ? "Submitting..." : "Submit Task"}
           </button>
@@ -506,14 +503,14 @@ export default function UserDashboard() {
       </div>
 
       {/* Section 3: Task History with Date Navigation */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-xl font-bold mb-4">Task History</h2>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-lg font-bold text-slate-800 mb-4">Task History</h2>
 
         {/* Date Navigation */}
         <div className="flex items-center gap-3 mb-4">
           <button
             onClick={goToPreviousDay}
-            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200"
+            className="px-3 py-2 bg-gray-50 text-gray-600 rounded-xl font-medium hover:bg-gray-100 transition-colors"
           >
             &larr; Prev
           </button>
@@ -523,74 +520,74 @@ export default function UserDashboard() {
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
               max={today}
-              className="font-semibold border-2 border-gray-200 rounded-lg px-3 py-2"
+              className="font-semibold rounded-xl px-3 py-2"
             />
-            <p className="text-sm text-gray-500 mt-1">{displayDate(selectedDate)}</p>
+            <p className="text-sm text-gray-400 mt-1">{displayDate(selectedDate)}</p>
           </div>
           <button
             onClick={goToNextDay}
             disabled={isToday}
-            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-3 py-2 bg-gray-50 text-gray-600 rounded-xl font-medium hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             Next &rarr;
           </button>
         </div>
 
         {tasksLoading ? (
-          <p className="text-gray-500 text-center py-8">Loading tasks...</p>
+          <p className="text-gray-400 text-center py-10">Loading tasks...</p>
         ) : tasks.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No tasks for this date.</p>
+          <p className="text-gray-400 text-center py-10">No tasks for this date.</p>
         ) : (
           <div className="space-y-3">
             {tasks.map((t) => (
               <div
                 key={t.id}
-                className="border border-gray-200 rounded-xl p-4 hover:bg-gray-50"
+                className="border border-gray-100 rounded-xl p-4 hover:bg-indigo-50/30 transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-blue-600">{t.vehicleNumber}</span>
-                    <span className="text-gray-400">|</span>
+                    <span className="font-bold text-indigo-600">{t.vehicleNumber}</span>
+                    <span className="text-gray-300">|</span>
                     <span className="text-gray-600">{t.task || "No task description"}</span>
                   </div>
                   <Link
                     href={`/dashboard/tasks/${t.id}`}
-                    className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg font-semibold hover:bg-blue-100 text-base whitespace-nowrap"
+                    className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg font-medium hover:bg-indigo-100 text-sm whitespace-nowrap transition-colors"
                   >
                     Edit
                   </Link>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 text-sm">
                   <div className="flex items-center gap-1">
-                    <span className="text-gray-500">Status:</span>
+                    <span className="text-gray-400">Status:</span>
                     <span
                       className={`font-semibold ${
                         t.status === "Working"
-                          ? "text-green-600"
+                          ? "text-emerald-600"
                           : t.status === "Not Working"
-                          ? "text-red-600"
-                          : "text-gray-500"
+                          ? "text-red-500"
+                          : "text-gray-400"
                       }`}
                     >
                       {t.status}
                     </span>
                   </div>
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold border ${priorityColor(t.priority || "Low")}`}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold border ${priorityColor(t.priority || "Low")}`}
                   >
                     {t.priority || "Low"}
                   </span>
                   <div>
-                    <span className="text-gray-500">Location: </span>
-                    <span>{t.currentLocation || "-"}</span>
+                    <span className="text-gray-400">Location: </span>
+                    <span className="text-slate-600">{t.currentLocation || "-"}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Solution: </span>
-                    <span>{t.solution}</span>
+                    <span className="text-gray-400">Solution: </span>
+                    <span className="text-slate-600">{t.solution}</span>
                   </div>
                   <div>
-                    <span className="text-gray-500">Spares: </span>
-                    <span>{t.spares}</span>
+                    <span className="text-gray-400">Spares: </span>
+                    <span className="text-slate-600">{t.spares}</span>
                   </div>
                 </div>
                 {t.date && (
@@ -609,7 +606,7 @@ export default function UserDashboard() {
           </div>
         )}
 
-        <p className="text-gray-400 text-center mt-4 text-sm">
+        <p className="text-gray-400 text-center mt-4 text-xs">
           {tasks.length} task{tasks.length !== 1 ? "s" : ""} found
         </p>
       </div>
