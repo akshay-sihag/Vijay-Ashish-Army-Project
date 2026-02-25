@@ -39,9 +39,39 @@ interface Task {
   updatedAt: string;
 }
 
+function formatDate(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
+
+function displayDate(dateStr: string): string {
+  const date = new Date(dateStr + "T00:00:00");
+  return date.toLocaleDateString("en-IN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function getCurrentDateTime(): string {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  return now.toISOString().slice(0, 16);
+}
+
+function priorityColor(priority: string) {
+  switch (priority) {
+    case "High":
+      return "bg-red-100 text-red-700 border-red-200";
+    case "Medium":
+      return "bg-orange-100 text-orange-700 border-orange-200";
+    default:
+      return "bg-green-100 text-green-700 border-green-200";
+  }
+}
+
 export default function UserDashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Profile editing
@@ -52,6 +82,7 @@ export default function UserDashboard() {
 
   // Task form
   const [taskForm, setTaskForm] = useState({
+    date: getCurrentDateTime(),
     assignedLocation: "",
     currentLocation: "",
     task: "",
@@ -65,14 +96,16 @@ export default function UserDashboard() {
   const [taskSaving, setTaskSaving] = useState(false);
   const [taskMsg, setTaskMsg] = useState("");
 
-  const fetchData = useCallback(async () => {
-    const [profileRes, tasksRes] = await Promise.all([
-      fetch("/api/user/profile"),
-      fetch("/api/user/tasks"),
-    ]);
+  // Task history with date navigation
+  const today = formatDate(new Date());
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
 
-    if (profileRes.ok) {
-      const data: Profile = await profileRes.json();
+  const fetchProfile = useCallback(async () => {
+    const res = await fetch("/api/user/profile");
+    if (res.ok) {
+      const data: Profile = await res.json();
       setProfile(data);
       setProfileForm({
         name: data.name,
@@ -81,18 +114,44 @@ export default function UserDashboard() {
         unit: data.unit,
       });
     }
-
-    if (tasksRes.ok) {
-      const data: Task[] = await tasksRes.json();
-      setTasks(data);
-    }
-
     setLoading(false);
   }, []);
 
+  const fetchTasks = useCallback(async () => {
+    setTasksLoading(true);
+    const res = await fetch(`/api/user/tasks?date=${selectedDate}`);
+    if (res.ok) {
+      const data: Task[] = await res.json();
+      setTasks(data);
+    }
+    setTasksLoading(false);
+  }, [selectedDate]);
+
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    fetchProfile();
+  }, [fetchProfile]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  function goToPreviousDay() {
+    const date = new Date(selectedDate + "T00:00:00");
+    date.setDate(date.getDate() - 1);
+    setSelectedDate(formatDate(date));
+  }
+
+  function goToNextDay() {
+    const date = new Date(selectedDate + "T00:00:00");
+    date.setDate(date.getDate() + 1);
+    const todayDate = new Date();
+    todayDate.setHours(0, 0, 0, 0);
+    if (date <= todayDate) {
+      setSelectedDate(formatDate(date));
+    }
+  }
+
+  const isToday = selectedDate === today;
 
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
@@ -109,7 +168,7 @@ export default function UserDashboard() {
       if (res.ok) {
         setProfileMsg("Profile updated successfully.");
         setEditingProfile(false);
-        fetchData();
+        fetchProfile();
       } else {
         const data = await res.json();
         setProfileMsg(data.error || "Failed to update profile");
@@ -141,6 +200,7 @@ export default function UserDashboard() {
 
       setTaskMsg("Task submitted successfully!");
       setTaskForm({
+        date: getCurrentDateTime(),
         assignedLocation: "",
         currentLocation: "",
         task: "",
@@ -151,7 +211,7 @@ export default function UserDashboard() {
         solution: "NA",
         spares: "NA",
       });
-      fetchData();
+      fetchTasks();
     } catch {
       setTaskMsg("Something went wrong");
     } finally {
@@ -168,18 +228,6 @@ export default function UserDashboard() {
   }
 
   const vehicle = profile.vehicleAssignment?.vehicle;
-
-  // Group tasks by date
-  const tasksByDate: Record<string, Task[]> = {};
-  tasks.forEach((t) => {
-    const dateKey = new Date(t.date).toLocaleDateString("en-IN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    if (!tasksByDate[dateKey]) tasksByDate[dateKey] = [];
-    tasksByDate[dateKey].push(t);
-  });
 
   return (
     <div className="space-y-6">
@@ -347,6 +395,15 @@ export default function UserDashboard() {
 
           {/* Editable fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="sm:col-span-2">
+              <label className="block font-semibold mb-1">Date & Time *</label>
+              <input
+                type="datetime-local"
+                value={taskForm.date}
+                onChange={(e) => setTaskForm({ ...taskForm, date: e.target.value })}
+                required
+              />
+            </div>
             <div>
               <label className="block font-semibold mb-1">Assigned Location</label>
               <input
@@ -448,87 +505,113 @@ export default function UserDashboard() {
         </form>
       </div>
 
-      {/* Section 3: Task History */}
+      {/* Section 3: Task History with Date Navigation */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="text-xl font-bold mb-4">Task History</h2>
 
-        {tasks.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No tasks submitted yet.</p>
+        {/* Date Navigation */}
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={goToPreviousDay}
+            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200"
+          >
+            &larr; Prev
+          </button>
+          <div className="text-center">
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              max={today}
+              className="font-semibold border-2 border-gray-200 rounded-lg px-3 py-2"
+            />
+            <p className="text-sm text-gray-500 mt-1">{displayDate(selectedDate)}</p>
+          </div>
+          <button
+            onClick={goToNextDay}
+            disabled={isToday}
+            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            Next &rarr;
+          </button>
+        </div>
+
+        {tasksLoading ? (
+          <p className="text-gray-500 text-center py-8">Loading tasks...</p>
+        ) : tasks.length === 0 ? (
+          <p className="text-gray-500 text-center py-8">No tasks for this date.</p>
         ) : (
-          <div className="space-y-6">
-            {Object.entries(tasksByDate).map(([date, dateTasks]) => (
-              <div key={date}>
-                <h3 className="text-lg font-bold text-gray-700 mb-3 border-b border-gray-200 pb-2">
-                  {date}
-                </h3>
-                <div className="space-y-3">
-                  {dateTasks.map((t) => (
-                    <div
-                      key={t.id}
-                      className="border border-gray-200 rounded-xl p-4 hover:bg-gray-50"
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <span className="font-bold text-blue-600">{t.vehicleNumber}</span>
-                          <span className="text-gray-400 mx-2">|</span>
-                          <span className="text-gray-600">{t.task || "No task description"}</span>
-                        </div>
-                        <Link
-                          href={`/dashboard/tasks/${t.id}`}
-                          className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg font-semibold hover:bg-blue-100 text-base whitespace-nowrap"
-                        >
-                          Edit
-                        </Link>
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
-                        <div>
-                          <span className="text-gray-500">Status: </span>
-                          <span
-                            className={`font-semibold ${
-                              t.status === "Working"
-                                ? "text-green-600"
-                                : t.status === "Not Working"
-                                ? "text-red-600"
-                                : "text-gray-500"
-                            }`}
-                          >
-                            {t.status}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Priority: </span>
-                          <span
-                            className={`font-semibold ${
-                              t.priority === "High"
-                                ? "text-red-600"
-                                : t.priority === "Medium"
-                                ? "text-orange-600"
-                                : "text-green-600"
-                            }`}
-                          >
-                            {t.priority || "Low"}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Location: </span>
-                          <span>{t.currentLocation || "-"}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Solution: </span>
-                          <span>{t.solution}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-500">Spares: </span>
-                          <span>{t.spares}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+          <div className="space-y-3">
+            {tasks.map((t) => (
+              <div
+                key={t.id}
+                className="border border-gray-200 rounded-xl p-4 hover:bg-gray-50"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-blue-600">{t.vehicleNumber}</span>
+                    <span className="text-gray-400">|</span>
+                    <span className="text-gray-600">{t.task || "No task description"}</span>
+                  </div>
+                  <Link
+                    href={`/dashboard/tasks/${t.id}`}
+                    className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg font-semibold hover:bg-blue-100 text-base whitespace-nowrap"
+                  >
+                    Edit
+                  </Link>
                 </div>
+                <div className="flex flex-wrap items-center gap-3 text-sm">
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-500">Status:</span>
+                    <span
+                      className={`font-semibold ${
+                        t.status === "Working"
+                          ? "text-green-600"
+                          : t.status === "Not Working"
+                          ? "text-red-600"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {t.status}
+                    </span>
+                  </div>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-semibold border ${priorityColor(t.priority || "Low")}`}
+                  >
+                    {t.priority || "Low"}
+                  </span>
+                  <div>
+                    <span className="text-gray-500">Location: </span>
+                    <span>{t.currentLocation || "-"}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Solution: </span>
+                    <span>{t.solution}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Spares: </span>
+                    <span>{t.spares}</span>
+                  </div>
+                </div>
+                {t.date && (
+                  <p className="text-xs text-gray-400 mt-2">
+                    {new Date(t.date).toLocaleString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                )}
               </div>
             ))}
           </div>
         )}
+
+        <p className="text-gray-400 text-center mt-4 text-sm">
+          {tasks.length} task{tasks.length !== 1 ? "s" : ""} found
+        </p>
       </div>
     </div>
   );

@@ -56,10 +56,13 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { assignedLocation, currentLocation, task, action, status, priority, problem, solution, spares } = body;
+    const { date, assignedLocation, currentLocation, task, action, status, priority, problem, solution, spares } = body;
 
-    const now = new Date();
-    const todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    if (!date) {
+      return NextResponse.json({ error: "Date & Time is required" }, { status: 400 });
+    }
+
+    const taskDate = new Date(date);
 
     const newTask = await prisma.task.create({
       data: {
@@ -76,7 +79,7 @@ export async function POST(request: NextRequest) {
         problem: problem || "",
         solution: solution || "NA",
         spares: spares || "NA",
-        date: todayUTC,
+        date: taskDate,
       },
     });
 

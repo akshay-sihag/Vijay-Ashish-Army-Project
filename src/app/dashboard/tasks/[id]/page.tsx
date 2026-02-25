@@ -32,6 +32,7 @@ export default function EditTaskPage() {
   const [msg, setMsg] = useState("");
 
   const [formData, setFormData] = useState({
+    date: "",
     assignedLocation: "",
     currentLocation: "",
     task: "",
@@ -48,7 +49,12 @@ export default function EditTaskPage() {
     if (res.ok) {
       const data: Task = await res.json();
       setTask(data);
+      // Convert UTC date to local datetime-local format
+      const taskDate = new Date(data.date);
+      taskDate.setMinutes(taskDate.getMinutes() - taskDate.getTimezoneOffset());
+      const dateLocal = taskDate.toISOString().slice(0, 16);
       setFormData({
+        date: dateLocal,
         assignedLocation: data.assignedLocation,
         currentLocation: data.currentLocation,
         task: data.task,
@@ -101,12 +107,6 @@ export default function EditTaskPage() {
     return <div className="text-center py-12 text-xl text-red-500">Task not found</div>;
   }
 
-  const taskDate = new Date(task.date).toLocaleDateString("en-IN", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   return (
     <div className="max-w-2xl mx-auto">
       <button
@@ -116,8 +116,7 @@ export default function EditTaskPage() {
         &larr; Back to Dashboard
       </button>
 
-      <h1 className="text-2xl font-bold mb-2">Edit Task</h1>
-      <p className="text-gray-500 mb-6">Date: {taskDate}</p>
+      <h1 className="text-2xl font-bold mb-6">Edit Task</h1>
 
       {msg && (
         <div
@@ -166,6 +165,15 @@ export default function EditTaskPage() {
         {/* Editable fields */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="sm:col-span-2">
+              <label className="block font-semibold mb-1">Date & Time *</label>
+              <input
+                type="datetime-local"
+                value={formData.date}
+                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                required
+              />
+            </div>
             <div>
               <label className="block font-semibold mb-1">Assigned Location</label>
               <input

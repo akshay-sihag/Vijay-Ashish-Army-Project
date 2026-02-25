@@ -40,9 +40,10 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { assignedLocation, currentLocation, task, action, status, priority, problem, solution, spares } = body;
+    const { date, assignedLocation, currentLocation, task, action, status, priority, problem, solution, spares } = body;
 
-    const data: Record<string, string> = {};
+    const data: Record<string, unknown> = {};
+    if (date !== undefined) data.date = new Date(date);
     if (assignedLocation !== undefined) data.assignedLocation = assignedLocation;
     if (currentLocation !== undefined) data.currentLocation = currentLocation;
     if (task !== undefined) data.task = task;
