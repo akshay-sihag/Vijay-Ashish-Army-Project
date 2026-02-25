@@ -8,6 +8,7 @@ export interface SessionPayload {
   role: "admin" | "user";
   userId?: string;
   name?: string;
+  superAdmin?: boolean;
 }
 
 function sign(payload: SessionPayload): string {

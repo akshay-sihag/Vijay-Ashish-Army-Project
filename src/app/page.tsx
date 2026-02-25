@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"admin" | "user">("user");
+  const [adminUsername, setAdminUsername] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [username, setUsername] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -21,7 +22,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: adminPassword }),
+        body: JSON.stringify({ loginType: "admin", username: adminUsername, password: adminPassword }),
       });
 
       const data = await res.json();
@@ -47,7 +48,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password: userPassword }),
+        body: JSON.stringify({ loginType: "user", username, password: userPassword }),
       });
 
       const data = await res.json();
@@ -117,7 +118,20 @@ export default function LoginPage() {
             <form onSubmit={handleAdminLogin} className="space-y-5">
               <div>
                 <label className="block text-base font-semibold mb-2 text-gray-700">
-                  Admin Password
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={adminUsername}
+                  onChange={(e) => setAdminUsername(e.target.value)}
+                  placeholder="Enter admin username"
+                  required
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-base font-semibold mb-2 text-gray-700">
+                  Password
                 </label>
                 <input
                   type="password"
@@ -125,7 +139,6 @@ export default function LoginPage() {
                   onChange={(e) => setAdminPassword(e.target.value)}
                   placeholder="Enter admin password"
                   required
-                  autoFocus
                 />
               </div>
               <button
