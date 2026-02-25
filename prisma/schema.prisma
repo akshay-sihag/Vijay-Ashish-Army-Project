@@ -54,6 +54,7 @@ model Task {
   task             String   @default("")
   action           String   @default("")
   status           String   @default("NA")
+  priority         String   @default("Low")
   problem          String   @default("")
   solution         String   @default("NA")
   spares           String   @default("NA")

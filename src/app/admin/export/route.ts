@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
     Task: t.task,
     Action: t.action,
     Status: t.status,
+    Priority: t.priority || "Low",
     Problem: t.problem,
     Solution: t.solution,
     Spares: t.spares,
@@ -58,6 +59,7 @@ export async function GET(request: NextRequest) {
     { wch: 25 }, // Task
     { wch: 25 }, // Action
     { wch: 14 }, // Status
+    { wch: 10 }, // Priority
     { wch: 25 }, // Problem
     { wch: 14 }, // Solution
     { wch: 14 }, // Spares

@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { assignedLocation, currentLocation, task, action, status, problem, solution, spares } = body;
+    const { assignedLocation, currentLocation, task, action, status, priority, problem, solution, spares } = body;
 
     const now = new Date();
     const todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
         task: task || "",
         action: action || "",
         status: status || "NA",
+        priority: priority || "Low",
         problem: problem || "",
         solution: solution || "NA",
         spares: spares || "NA",

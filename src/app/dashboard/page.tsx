@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { STATUS_OPTIONS, SOLUTION_OPTIONS, SPARES_OPTIONS, GENDER_OPTIONS } from "@/lib/types";
+import { STATUS_OPTIONS, SOLUTION_OPTIONS, SPARES_OPTIONS, PRIORITY_OPTIONS, GENDER_OPTIONS } from "@/lib/types";
 
 interface VehicleInfo {
   vehicleNumber: string;
@@ -31,6 +31,7 @@ interface Task {
   task: string;
   action: string;
   status: string;
+  priority: string;
   problem: string;
   solution: string;
   spares: string;
@@ -56,6 +57,7 @@ export default function UserDashboard() {
     task: "",
     action: "",
     status: "NA",
+    priority: "Low",
     problem: "",
     solution: "NA",
     spares: "NA",
@@ -144,6 +146,7 @@ export default function UserDashboard() {
         task: "",
         action: "",
         status: "NA",
+        priority: "Low",
         problem: "",
         solution: "NA",
         spares: "NA",
@@ -392,6 +395,17 @@ export default function UserDashboard() {
               </select>
             </div>
             <div>
+              <label className="block font-semibold mb-1">Priority</label>
+              <select
+                value={taskForm.priority}
+                onChange={(e) => setTaskForm({ ...taskForm, priority: e.target.value })}
+              >
+                {PRIORITY_OPTIONS.map((p) => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="block font-semibold mb-1">Problem</label>
               <input
                 type="text"
@@ -479,6 +493,20 @@ export default function UserDashboard() {
                             }`}
                           >
                             {t.status}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500">Priority: </span>
+                          <span
+                            className={`font-semibold ${
+                              t.priority === "High"
+                                ? "text-red-600"
+                                : t.priority === "Medium"
+                                ? "text-orange-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            {t.priority || "Low"}
                           </span>
                         </div>
                         <div>

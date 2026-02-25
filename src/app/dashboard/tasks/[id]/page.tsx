@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { STATUS_OPTIONS, SOLUTION_OPTIONS, SPARES_OPTIONS } from "@/lib/types";
+import { STATUS_OPTIONS, SOLUTION_OPTIONS, SPARES_OPTIONS, PRIORITY_OPTIONS } from "@/lib/types";
 
 interface Task {
   id: string;
@@ -14,6 +14,7 @@ interface Task {
   task: string;
   action: string;
   status: string;
+  priority: string;
   problem: string;
   solution: string;
   spares: string;
@@ -36,6 +37,7 @@ export default function EditTaskPage() {
     task: "",
     action: "",
     status: "NA",
+    priority: "Low",
     problem: "",
     solution: "NA",
     spares: "NA",
@@ -52,6 +54,7 @@ export default function EditTaskPage() {
         task: data.task,
         action: data.action,
         status: data.status,
+        priority: data.priority || "Low",
         problem: data.problem,
         solution: data.solution,
         spares: data.spares,
@@ -207,6 +210,17 @@ export default function EditTaskPage() {
               >
                 {STATUS_OPTIONS.map((s) => (
                   <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block font-semibold mb-1">Priority</label>
+              <select
+                value={formData.priority}
+                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+              >
+                {PRIORITY_OPTIONS.map((p) => (
+                  <option key={p} value={p}>{p}</option>
                 ))}
               </select>
             </div>
