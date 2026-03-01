@@ -201,7 +201,7 @@ export default function AdminUsersPage() {
                 <th>Username</th>
                 <th>Age</th>
                 <th>Gender</th>
-                <th>Unit</th>
+                <th>Contact Number</th>
                 <th>Vehicle</th>
                 <th>Actions</th>
               </tr>
