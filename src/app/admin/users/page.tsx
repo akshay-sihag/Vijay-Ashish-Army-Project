@@ -13,7 +13,7 @@ const startListening = () => {
   const recognition = new SpeechRecognition();
   recognition.lang = "en-US";
 
-  recognition.onresult = (event) => {
+  recognition.onresult = (event: any) => {
     const command = event.results[0][0].transcript.toLowerCase();
     handleVoiceCommand(command);
   };
