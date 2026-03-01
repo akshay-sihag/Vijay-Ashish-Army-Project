@@ -1,4 +1,39 @@
 "use client";
+const startListening = () => {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Voice not supported on this browser");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "en-US";
+
+  recognition.onresult = (event) => {
+    const command = event.results[0][0].transcript.toLowerCase();
+    handleVoiceCommand(command);
+  };
+
+  recognition.start();
+};
+
+const handleVoiceCommand = (command: string) => {
+  if (command.includes("add user")) {
+    alert("Opening Add User...");
+  }
+
+  if (command.includes("logout")) {
+    alert("Logging out...");
+  }
+
+  if (command.includes("users")) {
+    window.location.href = "/admin/users";
+  }
+
+  console.log("Voice command:", command);
+};
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -97,6 +132,29 @@ export default function AdminUsersPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-slate-800">Manage Users</h1>
+        <div className="flex gap-2 items-center mt-2">
+  <button
+    onClick={startListening}
+    className="bg-green-600 text-white px-3 py-1 rounded-lg"
+  >
+    🎤 Start
+  </button>
+
+  <button
+    onClick={stopListening}
+    className="bg-red-600 text-white px-3 py-1 rounded-lg"
+  >
+    🛑 Stop
+  </button>
+</div>
+
+<p className="text-sm text-gray-600 mt-2">
+  {listening ? "Listening..." : "Mic Off"}
+</p>
+
+<p className="text-sm text-indigo-600">
+  {transcript}
+</p>
         <button
           onClick={() => setShowForm(!showForm)}
           className="bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
