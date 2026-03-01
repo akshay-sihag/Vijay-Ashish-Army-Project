@@ -1,7 +1,9 @@
 "use client";
 const startListening = () => {
   const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+  typeof window !== "undefined"
+    ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    : null;
 
   if (!SpeechRecognition) {
     alert("Voice not supported on this browser");
