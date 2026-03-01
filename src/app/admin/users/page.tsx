@@ -9,6 +9,11 @@ const startListening = () => {
     alert("Voice not supported on this browser");
     return;
   }
+  const stopListening = () => {
+  if (recognition) {
+    recognition.stop();
+  }
+};
 
   const recognition = new SpeechRecognition();
   recognition.lang = "en-US";
