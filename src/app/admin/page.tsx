@@ -92,6 +92,7 @@ export default function AdminDashboard() {
   // Filters
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterPriority, setFilterPriority] = useState("All");
+  const [voiceText, setVoiceText] = useState("");
 
   const fetchTasks = useCallback(async () => {
     setLoading(true);
@@ -128,6 +129,27 @@ export default function AdminDashboard() {
   }
 
   const isToday = selectedDate === today;
+  function handleVoiceCommand(command: string) {
+  const text = command.toLowerCase();
+
+  if (text.includes("high")) setFilterPriority("High");
+  if (text.includes("medium")) setFilterPriority("Medium");
+  if (text.includes("low")) setFilterPriority("Low");
+
+  if (text.includes("working")) setFilterStatus("Working");
+  if (text.includes("not working")) setFilterStatus("Not Working");
+
+  if (text.includes("clear")) {
+    setFilterStatus("All");
+    setFilterPriority("All");
+  }
+}
+  function startVoiceAssistant() {
+  startListening((text) => {
+    setVoiceText(text);
+    handleVoiceCommand(text);
+  });
+}
 
   // Apply filters
   const filteredTasks = tasks.filter((t) => {
@@ -176,6 +198,18 @@ export default function AdminDashboard() {
         </button>
       </div>
 
+      <button
+  onClick={startVoiceAssistant}
+  className="bg-indigo-600 text-white px-4 py-2 rounded-xl mb-4"
+>
+  🎤 Speak Command
+</button>
+
+{voiceText && (
+  <p className="text-sm text-gray-500 mb-3">
+    Heard: {voiceText}
+  </p>
+)}
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4 mb-5">
         <div className="flex items-center gap-2">
