@@ -27,7 +27,9 @@ export default function AdminUsersPage() {
 
 const [listening, setListening] = useState(false);
 const [transcript, setTranscript] = useState("");
-  const handleVoiceCommand = (command: string) => {
+  let recognition: any = null;
+
+const handleVoiceCommand = (command: string) => {
   if (command.includes("add user")) {
     alert("Opening Add User...");
   }
@@ -42,13 +44,8 @@ const [transcript, setTranscript] = useState("");
 
   console.log("Voice command:", command);
 };
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  
-  recognition.start();
-};
- const startListening = () => {
+
+const startListening = () => {
   const SpeechRecognition =
     typeof window !== "undefined"
       ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
@@ -73,34 +70,12 @@ const [transcript, setTranscript] = useState("");
 
   recognition.start();
 };
-  const SpeechRecognition =
-    typeof window !== "undefined"
-      ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-      : null;
 
-  if (!SpeechRecognition) {
-    alert("Voice not supported on this browser");
-    return;
-  }
-
-  recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
-
-  recognition.onstart = () => {
-    setListening(true);
-  };
-
-  recognition.onend = () => {
+const stopListening = () => {
+  if (recognition) {
+    recognition.stop();
     setListening(false);
-  };
-
-  recognition.onresult = (event: any) => {
-    const command = event.results[0][0].transcript.toLowerCase();
-    setTranscript(command);
-    handleVoiceCommand(command);
-  };
-
-  recognition.start();
+  }
 };
   const [formData, setFormData] = useState({
     name: "",
