@@ -1,21 +1,5 @@
 "use client";
 
-const handleVoiceCommand = (command: string) => {
-  if (command.includes("add user")) {
-    alert("Opening Add User...");
-  }
-
-  if (command.includes("logout")) {
-    alert("Logging out...");
-  }
-
-  if (command.includes("users")) {
-    window.location.href = "/admin/users";
-  }
-
-  console.log("Voice command:", command);
-};
-
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { GENDER_OPTIONS } from "@/lib/types";
@@ -43,9 +27,28 @@ export default function AdminUsersPage() {
 
 const [listening, setListening] = useState(false);
 const [transcript, setTranscript] = useState("");
+  const handleVoiceCommand = (command: string) => {
+  if (command.includes("add user")) {
+    alert("Opening Add User...");
+  }
+
+  if (command.includes("logout")) {
+    alert("Logging out...");
+  }
+
+  if (command.includes("users")) {
+    window.location.href = "/admin/users";
+  }
+
+  console.log("Voice command:", command);
+};
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  
+  recognition.start();
+};
+ const startListening = () => {
   const SpeechRecognition =
     typeof window !== "undefined"
       ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
@@ -59,13 +62,8 @@ const [transcript, setTranscript] = useState("");
   recognition = new SpeechRecognition();
   recognition.lang = "en-US";
 
-  recognition.onstart = () => {
-    setListening(true);
-  };
-
-  recognition.onend = () => {
-    setListening(false);
-  };
+  recognition.onstart = () => setListening(true);
+  recognition.onend = () => setListening(false);
 
   recognition.onresult = (event: any) => {
     const command = event.results[0][0].transcript.toLowerCase();
@@ -74,13 +72,6 @@ const [transcript, setTranscript] = useState("");
   };
 
   recognition.start();
-};
-  const startListening = () => {
-    const stopListening = () => {
-  if (recognition) {
-    recognition.stop();
-    setListening(false);
-  }
 };
   const SpeechRecognition =
     typeof window !== "undefined"
