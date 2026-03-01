@@ -27,8 +27,11 @@ export default function AdminUsersPage() {
 
 const [listening, setListening] = useState(false);
 const [transcript, setTranscript] = useState("");
-  let recognition: any = null;
-
+  
+  const [users, setUsers] = useState<User[]>([]);
+const [loading, setLoading] = useState(true);
+const [showForm, setShowForm] = useState(false);
+  
 const handleVoiceCommand = (command: string) => {
   if (command.includes("add user")) {
     alert("Opening Add User...");
