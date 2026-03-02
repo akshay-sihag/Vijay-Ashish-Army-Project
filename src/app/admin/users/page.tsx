@@ -27,25 +27,40 @@ export default function AdminUsersPage() {
 
 const [listening, setListening] = useState(false);
 const [transcript, setTranscript] = useState("");
+  const [showForm, setShowForm] = useState(false);
   
   const [users, setUsers] = useState<User[]>([]);
 const [loading, setLoading] = useState(true);
 const [showForm, setShowForm] = useState(false);
   
 const handleVoiceCommand = (command: string) => {
-  if (command.includes("add user")) {
-    alert("Opening Add User...");
+
+  const cmd = command.toLowerCase();
+
+  // ADD USER FORM OPEN
+  if (cmd.includes("add") && cmd.includes("user")) {
+    setShowForm(true);
+    return;
   }
 
-  if (command.includes("logout")) {
-    alert("Logging out...");
+  // CLOSE FORM
+  if (cmd.includes("close")) {
+    setShowForm(false);
+    return;
   }
 
-  if (command.includes("users")) {
+  // GO TO USERS PAGE
+  if (cmd.includes("users")) {
     window.location.href = "/admin/users";
+    return;
   }
 
-  console.log("Voice command:", command);
+  // LOGOUT
+  if (cmd.includes("logout")) {
+    window.location.href = "/login";
+    return;
+  }
+
 };
 
 const startListening = () => {
