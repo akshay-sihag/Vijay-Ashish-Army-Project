@@ -102,12 +102,7 @@ const stopListening = () => {
     gender: "Male",
     unit: "",
   });
-  const [formData, setFormData] = useState({
-  name: "",
-  email: "",
-  phone: ""
-});
-
+  
 useEffect(() => {
   if (!transcript) return;
 
