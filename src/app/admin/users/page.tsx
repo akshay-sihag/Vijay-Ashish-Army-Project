@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { GENDER_OPTIONS } from "@/lib/types";
 
@@ -102,6 +102,36 @@ const stopListening = () => {
     gender: "Male",
     unit: "",
   });
+  const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  phone: ""
+});
+
+useEffect(() => {
+  if (!transcript) return;
+
+  const text = transcript.toLowerCase();
+
+  // NAME
+  if (text.includes("name")) {
+    const name = text.replace("name", "").trim();
+    setFormData(prev => ({ ...prev, name }));
+  }
+
+  // EMAIL
+  if (text.includes("email")) {
+    const email = text.replace("email", "").trim();
+    setFormData(prev => ({ ...prev, email }));
+  }
+
+  // PHONE
+  if (text.includes("phone")) {
+    const phone = text.replace("phone", "").trim();
+    setFormData(prev => ({ ...prev, phone }));
+  }
+
+}, [transcript]);
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
 
