@@ -31,7 +31,6 @@ const [transcript, setTranscript] = useState("");
   
   const [users, setUsers] = useState<User[]>([]);
 const [loading, setLoading] = useState(true);
-const [showForm, setShowForm] = useState(false);
   
 const handleVoiceCommand = (command: string) => {
 
